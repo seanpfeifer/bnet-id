@@ -31,6 +31,8 @@ func main() {
 	mux.HandleFunc("/login", srv.OAuthRedirect)
 	mux.HandleFunc("/oauthCallback", srv.OAuthCallback)
 	mux.HandleFunc("/logout", srv.Logout)
+	// Static files, from the "static/" dir
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	httpSrv := &http.Server{
 		Addr:         host,
