@@ -27,35 +27,38 @@
         content: "";
       }
 
+      hr {
+        padding-bottom: 1rem;
+      }
+
     </style>
     <link rel="stylesheet" href="/static/pico.classless.min.css" />
     <title>What's my BNet ID?</title>
   </head>
 
   <body>
-  {{if .}}
+    {{if .}}
     <h1>BNet ID: <b>{{.BNetID}}</b></h1>
     <div>Battletag: <b>{{.BattleTag}}</b></div>
     <div><a href="/logout">Log out</a></div>
-  {{else}}
+    {{else}}
     <h1><a href="/login">Log in to view your BNet ID</a></h1>
     <div>This site allows you to easily view your BNet Account ID.</div>
-  {{end}}
-    <hr>
+    {{end}}
+    <hr />
     <div>
-      <h2>FAQ</h2>
       <ul>
         <li>
           <h3>What is a BNet Account ID?</h3>
-          Your unique ID that can be used to distinguish your account from others.
+          Your unique ID that can be used to distinguish your account from others
         </li>
         <li>
           <h3>How is this different from a Battletag?</h3>
-          A BNet ID cannot be changed, and is assigned at account creation.
+          A BNet ID cannot be changed, and is assigned at account creation
         </li>
         <li>
-          <h3>Why should I care?</h3>
-          You might not - but this information may be valuable to developers who are trying to help you.
+          <h3>Why is this useful?</h3>
+          Developers can use this to troubleshoot individual account issues
         </li>
         <li>
           <h3>Is this site safe?</h3>
@@ -66,7 +69,7 @@
         </li>
         <li>
           <h3>Who made this?</h3>
-          <a href="https://github.com/seanpfeifer">Sean Pfeifer</a> made this.
+          <a href="https://github.com/seanpfeifer">Sean Pfeifer</a> made this
         </li>
       </ul>
     </div>
