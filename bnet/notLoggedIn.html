@@ -3,13 +3,8 @@
   <head>
     <style>
       body {
-        background-color: #303030;
-        color: #ddd;
+        padding-top: 2rem;
         text-align: center;
-      }
-
-      a {
-        color: #66f;
       }
 
       ul {
@@ -24,19 +19,20 @@
         padding-bottom: 1rem;
       }
 
-      h3 {
-        margin: 0.333rem;
+      li::marker {
+        content: "";
       }
 
     </style>
+    <link rel="stylesheet" href="/pico.classless.min.css" />
   </head>
 
   <body>
     <h1><a href="/login">Log in to view your BNet ID</a></h1>
     <div>This site allows you to easily view your BNet Account ID.</div>
     <hr>
-    <details>
-      <summary>FAQ</summary>
+    <div>
+      <h2>FAQ</h2>
       <ul>
         <li>
           <h3>What is a BNet Account ID?</h3>
@@ -62,7 +58,7 @@
           <a href="https://github.com/seanpfeifer">Sean Pfeifer</a> made this.
         </li>
       </ul>
-    </details>
+    </div>
   </body>
 
 </html>
