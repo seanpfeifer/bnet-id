@@ -69,7 +69,7 @@ func (s *Server) OAuthCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	player.SetCookies(w)
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func (s *Server) Index(w http.ResponseWriter, r *http.Request) {
@@ -83,7 +83,7 @@ func (s *Server) Index(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) Logout(w http.ResponseWriter, r *http.Request) {
 	ClearPlayerCookies(w)
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func (s *Server) GetAccountInfo(code string) (*Player, error) {
