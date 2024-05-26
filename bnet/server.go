@@ -102,6 +102,8 @@ func (s *Server) GetAccountInfo(code string) (*Player, error) {
 }
 
 func (s *Server) renderPage(w http.ResponseWriter, player *Player) {
+	// Tell the browser to never cache this page
+	w.Header().Set("Cache-Control", "no-store")
 	if err := s.site.Execute(w, player); err != nil {
 		http.Error(w, fmt.Sprintf("Failed to render page: %v", err), http.StatusInternalServerError)
 	}
