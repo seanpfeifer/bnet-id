@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	_ "embed"
 	"encoding/base64"
+	"html/template"
 	"time"
 
 	"fmt"
@@ -19,11 +20,8 @@ const (
 	randomByteLength = 12 // BNet doesn't like large states, so I'm using 12 here
 )
 
-//go:embed notLoggedIn.html
-var notLoggedIn string
-
-//go:embed loggedIn.html
-var loggedIn string
+//go:embed site.tmpl
+var siteTemplate string
 
 var usOAuthEndpoint = oauth2.Endpoint{
 	AuthURL:  "https://oauth.battle.net/authorize",
@@ -33,9 +31,12 @@ var usOAuthEndpoint = oauth2.Endpoint{
 type Server struct {
 	Nonces   NonceMap
 	OAuthCfg *oauth2.Config
+	site     *template.Template
 }
 
 func NewServer(clientID, clientSecret, redirectURL string) *Server {
+	tmpl, err := template.New("site").Parse(siteTemplate)
+	logging.FatalIfError(err)
 	return &Server{
 		Nonces: *NewNonceMap(stateValidTime),
 		OAuthCfg: &oauth2.Config{
@@ -44,6 +45,7 @@ func NewServer(clientID, clientSecret, redirectURL string) *Server {
 			RedirectURL:  redirectURL,
 			Endpoint:     usOAuthEndpoint,
 		},
+		site: tmpl,
 	}
 }
 
@@ -78,7 +80,7 @@ func (s *Server) Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	player, _ := PlayerFromRequest(r)
-	renderPage(w, player)
+	s.renderPage(w, player)
 }
 
 func (s *Server) Logout(w http.ResponseWriter, r *http.Request) {
@@ -99,15 +101,10 @@ func (s *Server) GetAccountInfo(code string) (*Player, error) {
 	return GetPlayerInfo(client)
 }
 
-func renderPage(w http.ResponseWriter, player *Player) {
-	// TODO: Instead of this, consider either SPA or giving a page based on cookies in Caddy:
-	// https://caddy.community/t/proxying-based-on-url-parameter-cookie-value-header/2143/5
-	// For now, as a test, this is fine.
-	if player != nil {
-		w.Write([]byte(fmt.Sprintf(loggedIn, player.BNetID, player.BattleTag)))
-		return
+func (s *Server) renderPage(w http.ResponseWriter, player *Player) {
+	if err := s.site.Execute(w, player); err != nil {
+		http.Error(w, fmt.Sprintf("Failed to render page: %v", err), http.StatusInternalServerError)
 	}
-	w.Write([]byte(notLoggedIn))
 }
 
 func newNonce() string {
