@@ -31,6 +31,8 @@ func main() {
 	mux.HandleFunc("/login", srv.OAuthRedirect)
 	mux.HandleFunc("/oauthCallback", srv.OAuthCallback)
 	mux.HandleFunc("/logout", srv.Logout)
+	// A health check endpoint, just returns 200 OK if the web server is responding
+	mux.HandleFunc("/health", func(http.ResponseWriter, *http.Request) {})
 	// Static files, from the "static/" dir
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
