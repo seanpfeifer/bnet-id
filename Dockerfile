@@ -1,7 +1,7 @@
 #---------------
 #--- Builder ---
 #---------------
-FROM docker.io/library/golang:1.22-alpine AS builder
+FROM docker.io/library/golang:1.24-alpine AS builder
 
 COPY [".", "/bnet"]
 WORKDIR /bnet
