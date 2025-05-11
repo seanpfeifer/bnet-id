@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"net/http"
 	"time"
 
@@ -10,8 +11,8 @@ import (
 )
 
 const (
-	secretFile = "secrets/secret.toml"
-	host       = ":8080"
+	defaultSecretsFile = "secrets/secret.toml"
+	host               = ":8080"
 )
 
 type Secrets struct {
@@ -21,8 +22,12 @@ type Secrets struct {
 }
 
 func main() {
-	secrets, _, err := fileload.TOML[Secrets](secretFile)
-	logging.FatalIfError(err, secretFile)
+	// Allow the user to specify a different secrets file
+	secretsFile := flag.String("secrets", defaultSecretsFile, "Full path to the secrets file")
+	flag.Parse()
+
+	secrets, _, err := fileload.TOML[Secrets](*secretsFile)
+	logging.FatalIfError(err, *secretsFile)
 
 	srv := bnet.NewServer(secrets.ClientID, secrets.ClientSecret, secrets.RedirectURL)
 
